@@ -33,11 +33,11 @@ public class TestSslModule extends TestModule
     @Override
     public Configuration abstractConfig()
     {
-        final String keyStorePath = TestSslModule.class.getClassLoader().getResource("certs/test.p12").getPath();
-        final String keyStorePassword = "password";
+        final String keyStorePath = System.getProperty("javax.net.ssl.keyStore");
+        final String keyStorePassword = System.getProperty("javax.net.ssl.keyStorePassword");
 
-        final String trustStorePath = TestSslModule.class.getClassLoader().getResource("certs/ca.p12").getPath();
-        final String trustStorePassword = "password";
+        final String trustStorePath = System.getProperty("javax.net.ssl.trustStore");
+        final String trustStorePassword = System.getProperty("javax.net.ssl.trustStorePassword");
 
         return new Configuration.Builder()
                            .setCassandraHost("INVALID_FOR_TEST")

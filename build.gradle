@@ -134,7 +134,9 @@ clean.doLast {
 
 test {
     useJUnitPlatform()
-    systemProperty "javax.net.ssl.trustStore", "$projectDir/src/test/resources/certs/ca.p12"
+    systemProperty "javax.net.ssl.keyStore", file("$projectDir/src/test/resources/certs/test.p12")
+    systemProperty "javax.net.ssl.keyStorePassword", "password"
+    systemProperty "javax.net.ssl.trustStore", file("$projectDir/src/test/resources/certs/ca.p12")
     systemProperty "javax.net.ssl.trustStorePassword", "password"
 }
 
