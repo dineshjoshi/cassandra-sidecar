@@ -23,10 +23,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 import javax.annotation.Nullable;
-import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.google.common.collect.ImmutableMap;
@@ -36,8 +33,6 @@ import com.datastax.driver.core.Host;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import io.netty.handler.codec.http.HttpResponseStatus;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.vertx.core.json.Json;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
@@ -49,7 +44,7 @@ import org.apache.cassandra.sidecar.Configuration;
  */
 @Singleton
 @Path("/api/v1/__health")
-public class HealthService implements Host.StateListener
+public class HealthService implements Host.StateListener, IHealthService
 {
     private static final Logger logger = LoggerFactory.getLogger(HealthService.class);
     private final int checkPeriodMs;
@@ -108,14 +103,7 @@ public class HealthService implements Host.StateListener
         executor.shutdown();
     }
 
-    @Operation(summary = "Health Check for Cassandra's status",
-    description = "Returns HTTP 200 if Cassandra is available, 503 otherwise",
-    responses = {
-    @ApiResponse(responseCode = "200", description = "Cassandra is available"),
-    @ApiResponse(responseCode = "503", description = "Cassandra is not available")
-    })
-    @Produces(MediaType.APPLICATION_JSON)
-    @GET
+
     public Response doGet()
     {
         int status = lastKnownStatus ? HttpResponseStatus.OK.code() : HttpResponseStatus.SERVICE_UNAVAILABLE.code();
