@@ -45,6 +45,7 @@ import org.apache.cassandra.sidecar.common.ApiEndpointsV1;
 import org.apache.cassandra.sidecar.common.CassandraVersionProvider;
 import org.apache.cassandra.sidecar.common.dns.DnsResolver;
 import org.apache.cassandra.sidecar.common.utils.ValidationConfiguration;
+import org.apache.cassandra.sidecar.logging.SidecarLoggerHandler;
 import org.apache.cassandra.sidecar.routes.CassandraHealthService;
 import org.apache.cassandra.sidecar.routes.FileStreamHandler;
 import org.apache.cassandra.sidecar.routes.GossipInfoHandler;
@@ -150,7 +151,7 @@ public class MainModule extends AbstractModule
     {
         Router router = Router.router(vertx);
         router.route()
-              .handler(loggerHandler)
+              .handler(SidecarLoggerHandler.create(loggerHandler))
               .handler(TimeoutHandler.create(conf.getRequestTimeoutMillis(),
                                              HttpResponseStatus.REQUEST_TIMEOUT.code()));
 
